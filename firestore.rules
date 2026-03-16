@@ -1,0 +1,90 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: users/{userId}
+    // Document ID: userId
+    // Fields:
+    //   - name: string (required, < 100 chars)
+    //   - email: string (required, < 100 chars)
+    //   - collegeName: string (required, < 200 chars)
+    //   - rollNumber: string (required, < 50 chars)
+    //   - curriculum: string (required, < 100 chars)
+    //   - branch: string (required, < 100 chars)
+    //   - yearOfCourse: string (required, < 20 chars)
+    //
+    // Collection: users/{userId}/books
+    // Document ID: bookId
+    // Fields:
+    //   - title: string (required, < 200 chars)
+    //   - coverUrl: string (optional, < 1000000 chars)
+    //   - currentPage: number (required, >= 0)
+    //   - totalPages: number (required, > 0)
+    //   - lastOpened: number (required)
+    //   - status: string (optional, 'reading' or 'read')
+    //   - pins: list (optional)
+    //   - highlights: list (optional)
+    //   - stickyNotes: list (optional)
+    //
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() &&
+        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+          (request.auth.token.email == "patttipakavenkatesh@gmail.com" && request.auth.token.email_verified == true));
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    function hasRequiredFields(fields) {
+      return request.resource.data.keys().hasAll(fields);
+    }
+    
+    function isValidBook(data) {
+      return data.title is string && data.title.size() > 0 && data.title.size() < 200 &&
+             data.currentPage is number && data.currentPage >= 0 &&
+             data.totalPages is number && data.totalPages > 0 &&
+             data.lastOpened is number &&
+             (!('status' in data) || (data.status in ['reading', 'read'])) &&
+             (!('coverUrl' in data) || (data.coverUrl is string && data.coverUrl.size() < 1000000)) &&
+             (!('pins' in data) || data.pins is list) &&
+             (!('highlights' in data) || data.highlights is list) &&
+             (!('stickyNotes' in data) || data.stickyNotes is list);
+    }
+
+    function isValidUser(data) {
+      return data.name is string && data.name.size() > 0 && data.name.size() < 100 &&
+             data.email is string && data.email.size() > 0 && data.email.size() < 100 &&
+             data.collegeName is string && data.collegeName.size() > 0 && data.collegeName.size() < 200 &&
+             data.rollNumber is string && data.rollNumber.size() > 0 && data.rollNumber.size() < 50 &&
+             data.curriculum is string && data.curriculum.size() > 0 && data.curriculum.size() < 100 &&
+             data.branch is string && data.branch.size() > 0 && data.branch.size() < 100 &&
+             data.yearOfCourse is string && data.yearOfCourse.size() > 0 && data.yearOfCourse.size() < 20;
+    }
+
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+      allow create: if isOwner(userId) && hasRequiredFields(['name', 'email', 'collegeName', 'rollNumber', 'curriculum', 'branch', 'yearOfCourse']) && isValidUser(request.resource.data);
+      allow update: if isOwner(userId) && isValidUser(request.resource.data);
+      allow delete: if isOwner(userId);
+      
+      match /books/{bookId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId) && hasRequiredFields(['title', 'currentPage', 'totalPages', 'lastOpened']) && isValidBook(request.resource.data);
+        allow update: if isOwner(userId) && isValidBook(request.resource.data);
+        allow delete: if isOwner(userId);
+      }
+    }
+  }
+}

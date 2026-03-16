@@ -1,0 +1,78 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile information",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Full name of the user" },
+        "email": { "type": "string", "description": "Email address" },
+        "collegeName": { "type": "string", "description": "Name of the college" },
+        "rollNumber": { "type": "string", "description": "Roll number of the student" },
+        "curriculum": { "type": "string", "description": "Curriculum (e.g., Polytechnic Telangana, India)" },
+        "branch": { "type": "string", "description": "Branch of study" },
+        "yearOfCourse": { "type": "string", "description": "Year of course" }
+      },
+      "required": ["name", "email", "collegeName", "rollNumber", "curriculum", "branch", "yearOfCourse"]
+    },
+    "Book": {
+      "title": "Book",
+      "description": "A book in the user's library",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "description": "The title of the book" },
+        "coverUrl": { "type": "string", "description": "A base64 data URL for the book cover" },
+        "currentPage": { "type": "number", "description": "The current page the user is reading" },
+        "totalPages": { "type": "number", "description": "Total number of pages in the book" },
+        "lastOpened": { "type": "number", "description": "Timestamp of when the book was last opened" },
+        "status": { "type": "string", "enum": ["reading", "read"], "description": "Reading status" },
+        "pins": { "type": "array", "items": { "$ref": "#/entities/BookmarkPin" }, "description": "Bookmark pins" },
+        "highlights": { "type": "array", "items": { "$ref": "#/entities/Highlight" }, "description": "Text highlights" },
+        "stickyNotes": { "type": "array", "items": { "$ref": "#/entities/StickyNote" }, "description": "Sticky notes" }
+      },
+      "required": ["title", "currentPage", "totalPages", "lastOpened"]
+    },
+    "BookmarkPin": {
+      "title": "BookmarkPin",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "page": { "type": "number" },
+        "x": { "type": "number" },
+        "y": { "type": "number" },
+        "color": { "type": "string" }
+      }
+    },
+    "Highlight": {
+      "title": "Highlight",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "page": { "type": "number" },
+        "x": { "type": "number" },
+        "y": { "type": "number" },
+        "width": { "type": "number" },
+        "height": { "type": "number" },
+        "color": { "type": "string" }
+      }
+    },
+    "StickyNote": {
+      "title": "StickyNote",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "page": { "type": "number" },
+        "x": { "type": "number" },
+        "y": { "type": "number" },
+        "text": { "type": "string" },
+        "color": { "type": "string" }
+      }
+    }
+  },
+  "firestore": {
+    "/users/{userId}/books/{bookId}": {
+      "schema": { "$ref": "#/entities/Book" },
+      "description": "The books in the user's library"
+    }
+  }
+}

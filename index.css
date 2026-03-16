@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+@theme {
+  /* Deep Teal as base for darks */
+  --color-zinc-950: #0E2931;
+  --color-zinc-900: #0e2f38;
+  --color-zinc-800: #0f3840;
+  --color-zinc-700: #12484C;
+  --color-zinc-600: #1a5a5e;
+  --color-zinc-500: #2B7574;
+  --color-zinc-400: #4a9494;
+  --color-zinc-300: #7ab8b8;
+  --color-zinc-200: #b8d9d9;
+  --color-zinc-100: #E2E2E0;
+  --color-zinc-50:  #f4f4f3;
+
+  /* Crimson Red as primary accent */
+  --color-emerald-400: #c94040;
+  --color-emerald-500: #861211;
+  --color-emerald-600: #6b0e0e;
+  --color-emerald-900: #0E2931;
+
+  --color-blue-500: #861211;
+  --color-blue-600: #6b0e0e;
+
+  --color-red-500: #861211;
+  --color-red-600: #6b0e0e;
+
+  /* Teal mid-tones as secondary accents */
+  --color-teal-300: #4a9494;
+  --color-teal-400: #2B7574;
+  --color-teal-500: #12484C;
+  --color-teal-600: #0E2931;
+
+  --text-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --text-shadow-md: 0 2px 4px rgba(0, 0, 0, 0.5);
+}

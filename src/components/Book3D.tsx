@@ -12,7 +12,7 @@ interface Book3DProps {
 
 export const Book3D: React.FC<Book3DProps> = ({ title, author, coverImage, onOpen, isLoading }) => {
   return (
-    <div className="perspective-[2000px] w-[300px] h-[400px] relative group cursor-pointer" onClick={!isLoading ? onOpen : undefined}>
+    <div className="perspective-[2000px] w-[min(90vw,260px)] h-[min(80vh,340px)] sm:w-[min(90vw,300px)] sm:h-[min(80vh,400px)] relative group cursor-pointer" onClick={!isLoading ? onOpen : undefined}>
       <motion.div
         initial={{ rotateY: -30, rotateX: 10 }}
         animate={{ 

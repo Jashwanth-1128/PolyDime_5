@@ -81,7 +81,7 @@ export const AppExplainer = () => {
             initial={{ opacity: 0, y: 20, scale: 0.9, transformOrigin: 'bottom right' }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
-            className="absolute bottom-20 right-0 w-[380px] h-[520px] bg-zinc-900 border border-zinc-50/10 rounded-3xl shadow-2xl flex flex-col overflow-hidden backdrop-blur-xl"
+            className="absolute bottom-20 right-0 w-[90vw] max-w-[380px] h-[70vh] max-h-[520px] bg-zinc-900 border border-zinc-50/10 rounded-3xl shadow-2xl flex flex-col overflow-hidden backdrop-blur-xl"
           >
             {/* Header */}
             <div className="p-5 border-b border-zinc-50/5 bg-zinc-50/5 flex items-center justify-between">

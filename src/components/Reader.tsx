@@ -1330,7 +1330,7 @@ export const Reader = ({ bookId, onBack }: { bookId: string; onBack: () => void 
               exit={{ x: 320, opacity: 0 }}
               transition={{ type: 'spring', stiffness: 300, damping: 30 }}
               className={cn(
-                "w-80 border-l flex flex-col z-40 backdrop-blur-2xl shadow-2xl absolute right-0 top-0 bottom-0 pt-16",
+                "w-[min(80vw,320px)] border-l flex flex-col z-40 backdrop-blur-2xl shadow-2xl absolute right-0 top-0 bottom-0 pt-16",
                 theme === 'dark' ? 'border-white-soft/5 bg-background/95' : 'border-background/5 bg-white-soft/95'
               )}
             >

@@ -18,7 +18,23 @@ app.get('/health', (req, res) => {
 
 // Handle client-side routing, return all requests to index.html
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+  const indexFile = path.join(__dirname, 'dist', 'index.html');
+  res.sendFile(indexFile, (err) => {
+    if (err) {
+      console.error('Failed to send index.html:', err);
+      if (!res.headersSent) {
+        res.status(err.code === 'ENOENT' ? 404 : 500).send('Application not available');
+      }
+    }
+  });
+});
+
+// Global error handler (prevents unhandled exceptions from crashing the app)
+app.use((err, req, res, next) => {
+  console.error('Uncaught server error:', err);
+  if (!res.headersSent) {
+    res.status(500).send('Internal server error');
+  }
 });
 
 app.listen(port, '0.0.0.0', () => {
